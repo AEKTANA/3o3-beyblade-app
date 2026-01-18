@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -48,22 +48,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             flex: 1;
         }
-
-        /* --- จุดที่เพิ่มเพื่อให้แนวนอนพอดีจอ --- */
-        @media (max-height: 480px) {
-            .container { gap: 5px; }
-            .title { font-size: 1.1rem; }
-            .win-counter { padding: 5px !important; gap: 10px !important; }
-            .win-count { font-size: 1.4rem !important; }
-            .player-card { padding: 8px !important; }
-            .player-score { font-size: 2.2rem !important; }
-            .score-btn { padding: 6px 4px !important; }
-            .score-btn-icon { font-size: 1.1rem !important; }
-            .score-btn-label { font-size: 0.6rem !important; }
-            .subtract-btn { padding: 5px !important; font-size: 0.75rem !important; }
-            .control-btn { padding: 8px 15px !important; font-size: 0.85rem !important; }
-        }
-        /* ---------------------------------- */
 
         @media (min-width: 640px) {
             .title {
@@ -655,4 +639,28 @@
         };
 
         function initAudio() {
-            if (!state.audioContex
+            if (!state.audioContext) {
+                try {
+                    state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
+            }
+        }
+
+        function playClickSound() {
+            try {
+                initAudio();
+                if (!state.audioContext) return;
+                
+                var osc = state.audioContext.createOscillator();
+                var gain = state.audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(state.audioContext.destination);
+                
+                osc.frequency.value = 1000;
+                osc.type = 'sine';
+                
+                var now = state.audioContext.currentTime;
+                gain.ga
