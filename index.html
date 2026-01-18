@@ -663,4 +663,172 @@
                 osc.type = 'sine';
                 
                 var now = state.audioContext.currentTime;
-                gain.ga
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } catch (e) {
+                console.log('Sound error:', e);
+            }
+        }
+
+        function playWinSound() {
+            try {
+                initAudio();
+                if (!state.audioContext) return;
+                
+                var notes = [523.25, 659.25, 783.99, 1046.50];
+                
+                for (var i = 0; i < notes.length; i++) {
+                    var osc = state.audioContext.createOscillator();
+                    var gain = state.audioContext.createGain();
+                    
+                    osc.connect(gain);
+                    gain.connect(state.audioContext.destination);
+                    
+                    osc.frequency.value = notes[i];
+                    osc.type = 'sine';
+                    
+                    var startTime = state.audioContext.currentTime + (i * 0.15);
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                    
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.3);
+                }
+            } catch (e) {
+                console.log('Win sound error:', e);
+            }
+        }
+
+        function addScore(player, points) {
+            if (state.winner) return;
+            
+            playClickSound();
+            
+            if (player === 1) {
+                state.player1Score += points;
+                document.getElementById('player1Score').textContent = state.player1Score;
+                
+                if (state.player1Score >= 4) {
+                    state.winner = state.player1Name;
+                    state.player1Wins++;
+                    document.getElementById('player1Wins').textContent = state.player1Wins;
+                    showWinner(state.player1Name);
+                    setTimeout(playWinSound, 100);
+                }
+            } else {
+                state.player2Score += points;
+                document.getElementById('player2Score').textContent = state.player2Score;
+                
+                if (state.player2Score >= 4) {
+                    state.winner = state.player2Name;
+                    state.player2Wins++;
+                    document.getElementById('player2Wins').textContent = state.player2Wins;
+                    showWinner(state.player2Name);
+                    setTimeout(playWinSound, 100);
+                }
+            }
+        }
+
+        function subtractScore(player, points) {
+            if (state.winner) return;
+            
+            if (player === 1 && state.player1Score > 0) {
+                state.player1Score = Math.max(0, state.player1Score - points);
+                document.getElementById('player1Score').textContent = state.player1Score;
+            } else if (player === 2 && state.player2Score > 0) {
+                state.player2Score = Math.max(0, state.player2Score - points);
+                document.getElementById('player2Score').textContent = state.player2Score;
+            }
+        }
+
+        function showWinner(name) {
+            document.getElementById('winnerText').textContent = '🎉 ' + name + ' Wins! 🎉';
+            document.getElementById('winnerBanner').style.display = 'block';
+        }
+
+        function resetRound() {
+            state.player1Score = 0;
+            state.player2Score = 0;
+            state.winner = null;
+            
+            document.getElementById('player1Score').textContent = '0';
+            document.getElementById('player2Score').textContent = '0';
+            document.getElementById('winnerBanner').style.display = 'none';
+        }
+
+        function resetAll() {
+            state.player1Score = 0;
+            state.player2Score = 0;
+            state.player1Wins = 0;
+            state.player2Wins = 0;
+            state.winner = null;
+            
+            document.getElementById('player1Score').textContent = '0';
+            document.getElementById('player2Score').textContent = '0';
+            document.getElementById('player1Wins').textContent = '0';
+            document.getElementById('player2Wins').textContent = '0';
+            document.getElementById('winnerBanner').style.display = 'none';
+        }
+
+        function toggleOrientation() {
+            var grid = document.getElementById('playersGrid');
+            var text = document.getElementById('orientationText');
+            var icon = document.getElementById('orientationIcon');
+            
+            if (state.orientation === 'horizontal') {
+                state.orientation = 'vertical';
+                grid.className = 'players-grid vertical';
+                text.textContent = 'Horizontal';
+                icon.textContent = '↔️';
+            } else {
+                state.orientation = 'horizontal';
+                grid.className = 'players-grid horizontal';
+                text.textContent = 'Vertical';
+                icon.textContent = '↕️';
+            }
+        }
+
+        function toggleRules() {
+            var panel = document.getElementById('rulesPanel');
+            var icon = document.getElementById('rulesIcon');
+            
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                icon.textContent = '📖';
+            } else {
+                panel.style.display = 'none';
+                icon.textContent = '📋';
+            }
+        }
+
+        function editPlayer1Name() {
+            var textSpan = document.getElementById('player1NameText');
+            var input = document.getElementById('player1NameInput');
+            
+            textSpan.style.display = 'none';
+            input.style.display = 'inline';
+            input.value = state.player1Name;
+            input.focus();
+            
+            input.onblur = function() {
+                if (input.value.trim()) {
+                    state.player1Name = input.value.trim();
+                    textSpan.textContent = state.player1Name;
+                    document.getElementById('displayPlayer1Name').textContent = state.player1Name;
+                }
+                textSpan.style.display = 'inline';
+                input.style.display = 'none';
+            };
+            
+            input.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    input.blur();
+                }
+            };
+        }
+    </script>
+</body>
+</html>
