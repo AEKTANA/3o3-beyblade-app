@@ -594,7 +594,7 @@
                 </button>
                 <button class="control-btn btn-rules" onclick="toggleRules()">
                     <span class="icon" id="rulesIcon">📋</span>
-                    Rules
+                    กฎ
                 </button>
             </div>
 
@@ -652,12 +652,15 @@
             try {
                 initAudio();
                 if (!state.audioContext) return;
+                
                 var osc = state.audioContext.createOscillator();
                 var gain = state.audioContext.createGain();
+                
                 osc.connect(gain);
                 gain.connect(state.audioContext.destination);
-                osc.frequency.value = 800;
+                
+                osc.frequency.value = 1000;
                 osc.type = 'sine';
+                
                 var now = state.audioContext.currentTime;
-                gain.gain.setValueAtTime(0.1, now);
-                gain.gain.exponential
+                gain.ga
