@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyblade X Scoreboard</title>
 
 <style>
-:root {
+:root{
   --bg:#0f1115;
   --card:#181b22;
   --red:#ff4d4d;
   --blue:#4da3ff;
-  --text:#ffffff;
-  --muted:#9aa0aa;
+  --text:#fff;
 }
 
-* {
+*{
   box-sizing:border-box;
   font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-body {
+body{
   margin:0;
   background:var(--bg);
   color:var(--text);
@@ -30,48 +29,41 @@ body {
   align-items:center;
 }
 
-.app {
+.app{
   width:100%;
   max-width:900px;
   padding:16px;
 }
 
-h1 {
+h1{
   text-align:center;
   margin-bottom:12px;
 }
 
-.top-bar {
+.top-bar{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:12px;
   gap:10px;
-  flex-wrap:wrap;
+  margin-bottom:12px;
 }
 
 .top-bar button,
-.top-bar input {
+.top-bar input{
   background:var(--card);
   color:var(--text);
   border:1px solid #2a2f3a;
   padding:8px 12px;
   border-radius:10px;
-  font-size:0.9rem;
 }
 
-.top-bar input {
-  width:110px;
-  text-align:center;
-}
-
-.arena {
+.arena{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
 
-.player {
+.player{
   background:var(--card);
   border-radius:16px;
   padding:16px;
@@ -80,57 +72,69 @@ h1 {
   gap:12px;
 }
 
-.player.red { border:2px solid var(--red); }
-.player.blue { border:2px solid var(--blue); }
+.player.red{border:2px solid var(--red);}
+.player.blue{border:2px solid var(--blue);}
 
-.player h2 {
-  margin:0;
-  text-align:center;
-}
-
-.score {
+.score{
   font-size:3rem;
   text-align:center;
   font-weight:bold;
 }
 
-.buttons, .finish {
+.buttons,.finish{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:8px;
 }
 
-.buttons button, .finish button {
+button{
+  cursor:pointer;
+}
+
+.buttons button,
+.finish button{
   padding:14px 0;
   border-radius:12px;
   border:none;
   background:#222633;
   color:var(--text);
-  cursor:pointer;
 }
 
 .buttons button:active,
-.finish button:active {
+.finish button:active{
   transform:scale(0.95);
 }
 
-.winner {
-  margin-top:12px;
-  text-align:center;
-  font-size:1.2rem;
-  font-weight:bold;
-  color:#7CFF7C;
+/* ===== WIN OVERLAY ===== */
+.win-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
 }
 
-.footer {
-  margin-top:10px;
+.win-box{
   text-align:center;
-  font-size:0.8rem;
-  color:var(--muted);
+  animation:pop 0.6s ease-out;
 }
 
-@media (max-width:700px) {
-  .arena { grid-template-columns:1fr; }
+.win-text{
+  font-size:3rem;
+  font-weight:900;
+  text-shadow:0 0 20px #fff;
+}
+
+@keyframes pop{
+  0%{transform:scale(0.4); opacity:0;}
+  70%{transform:scale(1.1);}
+  100%{transform:scale(1); opacity:1;}
+}
+
+@media(max-width:700px){
+  .arena{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -140,11 +144,9 @@ h1 {
   <h1>⚡ BEYBLADE X ⚡</h1>
 
   <div class="top-bar">
-    <button onclick="resetMatch()">🔄 Reset Match</button>
-    <div>
-      Win Point:
-      <input type="number" id="winInput" min="1" value="7" onchange="updateWinPoint()">
-    </div>
+    <button onclick="resetMatch()">🔄 Reset</button>
+    Win:
+    <input type="number" id="winInput" value="7" min="1" onchange="updateWinPoint()">
     <button onclick="toggleSound()">🔊 <span id="soundText">ON</span></button>
   </div>
 
@@ -152,13 +154,11 @@ h1 {
     <div class="player red">
       <h2>Player B</h2>
       <div class="score" id="scoreB">0</div>
-
       <div class="buttons">
         <button onclick="addScore('B',1)">+1</button>
         <button onclick="addScore('B',2)">+2</button>
         <button onclick="addScore('B',3)">+3</button>
       </div>
-
       <div class="finish">
         <button onclick="addScore('B',3)">Burst</button>
         <button onclick="addScore('B',2)">Over</button>
@@ -169,13 +169,11 @@ h1 {
     <div class="player blue">
       <h2>Player X</h2>
       <div class="score" id="scoreX">0</div>
-
       <div class="buttons">
         <button onclick="addScore('X',1)">+1</button>
         <button onclick="addScore('X',2)">+2</button>
         <button onclick="addScore('X',3)">+3</button>
       </div>
-
       <div class="finish">
         <button onclick="addScore('X',3)">Burst</button>
         <button onclick="addScore('X',2)">Over</button>
@@ -183,79 +181,89 @@ h1 {
       </div>
     </div>
   </div>
+</div>
 
-  <div class="winner" id="winnerText"></div>
-
-  <div class="footer">
-    Ready for real competition
+<!-- WIN OVERLAY -->
+<div class="win-overlay" id="winOverlay" onclick="closeWin()">
+  <div class="win-box">
+    <div class="win-text" id="winText"></div>
+    <div>แตะหน้าจอเพื่อปิด</div>
   </div>
 </div>
 
 <script>
-let scoreB = 0;
-let scoreX = 0;
-let winPoint = 7;
-let soundOn = true;
+let scoreB=0, scoreX=0, winPoint=7;
+let soundOn=true, gameOver=false;
 
-const clickSound = new Audio(
-"data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQgAAAAA"
-);
+/* ===== SOUND ENGINE ===== */
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
 
-function playSound(){
-  if(soundOn){
-    clickSound.currentTime = 0;
-    clickSound.play();
-  }
+function beep(freq,dur){
+  if(!soundOn) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.frequency.value = freq;
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001, audioCtx.currentTime + dur
+  );
+  osc.stop(audioCtx.currentTime + dur);
 }
+
+function clickSound(){ beep(600,0.08); }
+function winSound(){ beep(1200,0.6); }
 
 function updateWinPoint(){
-  const val = parseInt(document.getElementById("winInput").value);
-  if(isNaN(val) || val < 1){
-    document.getElementById("winInput").value = winPoint;
-    return;
-  }
-  winPoint = val;
-  checkWinner();
+  const v=parseInt(winInput.value);
+  if(v>=1) winPoint=v;
 }
 
-function addScore(player, point){
-  if(checkWinner()) return;
-  playSound();
-
-  if(player === "B"){
-    scoreB += point;
-    document.getElementById("scoreB").innerText = scoreB;
-  } else {
-    scoreX += point;
-    document.getElementById("scoreX").innerText = scoreX;
+function addScore(p,pt){
+  if(gameOver) return;
+  clickSound();
+  if(p==="B"){
+    scoreB+=pt;
+    scoreBEl.textContent=scoreB;
+    if(scoreB>=winPoint) win("Player B");
+  }else{
+    scoreX+=pt;
+    scoreXEl.textContent=scoreX;
+    if(scoreX>=winPoint) win("Player X");
   }
-  checkWinner();
 }
 
-function checkWinner(){
-  if(scoreB >= winPoint){
-    document.getElementById("winnerText").innerText = "🏆 Player B Wins!";
-    return true;
-  }
-  if(scoreX >= winPoint){
-    document.getElementById("winnerText").innerText = "🏆 Player X Wins!";
-    return true;
-  }
-  return false;
+function win(player){
+  gameOver=true;
+  winSound();
+  winText.textContent = `🏆 ${player} WIN 🏆`;
+  winOverlay.style.display="flex";
+}
+
+function closeWin(){
+  winOverlay.style.display="none";
 }
 
 function resetMatch(){
-  scoreB = 0;
-  scoreX = 0;
-  document.getElementById("scoreB").innerText = 0;
-  document.getElementById("scoreX").innerText = 0;
-  document.getElementById("winnerText").innerText = "";
+  scoreB=0; scoreX=0; gameOver=false;
+  scoreBEl.textContent=0;
+  scoreXEl.textContent=0;
+  closeWin();
 }
 
 function toggleSound(){
-  soundOn = !soundOn;
-  document.getElementById("soundText").innerText = soundOn ? "ON" : "OFF";
+  soundOn=!soundOn;
+  soundText.textContent=soundOn?"ON":"OFF";
 }
+
+/* cache */
+const scoreBEl=document.getElementById("scoreB");
+const scoreXEl=document.getElementById("scoreX");
+const winOverlay=document.getElementById("winOverlay");
+const winText=document.getElementById("winText");
+const winInput=document.getElementById("winInput");
+const soundText=document.getElementById("soundText");
 </script>
 </body>
 </html>
