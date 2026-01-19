@@ -17,9 +17,10 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1e3a8a 0%, #7c2d92 50%, #dc2626 100%);
             min-height: 100vh;
-            padding: 10px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
             overflow-x: hidden;
         }
 
@@ -35,15 +36,63 @@
 
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .header-left {
+            position: absolute;
+            left: 0;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .header-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-right {
+            position: absolute;
+            right: 0;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                position: relative;
+            }
+            
+            .header-left, .header-right {
+                position: static;
+            }
+            
+            .header-center {
+                order: 2;
+                width: 100%;
+            }
+            
+            .header-left {
+                order: 1;
+            }
+            
+            .header-right {
+                order: 3;
+            }
         }
 
         .title {
             text-align: center;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             flex: 1;
@@ -55,42 +104,65 @@
             }
         }
 
-        .orientation-btn {
+        @media (max-width: 640px) {
+            .title {
+                font-size: 1.1rem;
+            }
+        }
+
+        .orientation-btn, .mode-btn {
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
-            padding: 8px 12px;
+            padding: 6px 10px;
             color: white;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: bold;
             transition: all 0.2s;
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
-        .orientation-btn:hover {
+        .orientation-btn:hover, .mode-btn:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: scale(1.05);
         }
 
+        .mode-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
         .orientation-icon {
-            font-size: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .mode-group {
+            display: flex;
+            gap: 3px;
         }
 
         .win-counter {
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: 10px;
+            padding: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             color: white;
+        }
+
+        @media (max-width: 640px) {
+            .win-counter {
+                padding: 6px;
+                gap: 10px;
+            }
         }
 
         .win-item {
@@ -102,23 +174,37 @@
         }
 
         .win-icon {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
         .win-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             opacity: 0.8;
         }
 
         .win-count {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
         }
 
         .win-name {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             opacity: 0.8;
             font-weight: bold;
+        }
+
+        @media (max-width: 640px) {
+            .win-icon {
+                font-size: 1rem;
+            }
+            
+            .win-count {
+                font-size: 1.3rem;
+            }
+            
+            .win-label, .win-name {
+                font-size: 0.6rem;
+            }
         }
 
         .win-separator {
@@ -173,13 +259,27 @@
             grid-template-rows: 1fr 1fr;
         }
 
+        @media (max-width: 640px) {
+            .players-grid {
+                gap: 10px;
+            }
+        }
+
         .player-card {
-            border-radius: 24px;
-            padding: 15px;
+            border-radius: 20px;
+            padding: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             border: 4px solid;
+        }
+
+        @media (max-width: 640px) {
+            .player-card {
+                border-radius: 16px;
+                padding: 10px;
+                border: 3px solid;
+            }
         }
 
         .player1 {
@@ -194,7 +294,13 @@
 
         .player-header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .player-header {
+                margin-bottom: 6px;
+            }
         }
 
         .player-name {
@@ -222,10 +328,16 @@
         }
 
         .player-score {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 640px) {
+            .player-score {
+                font-size: 2.5rem;
+            }
         }
 
         .player-score-label {
@@ -257,7 +369,7 @@
         }
 
         .score-btn {
-            padding: 10px 8px;
+            padding: 8px 6px;
             border: none;
             border-radius: 8px;
             font-weight: bold;
@@ -265,11 +377,19 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: all 0.2s;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+        }
+
+        @media (max-width: 640px) {
+            .score-btn {
+                padding: 6px 4px;
+                font-size: 0.7rem;
+                gap: 2px;
+            }
         }
 
         .score-btn:hover:not(:disabled) {
@@ -283,18 +403,32 @@
         }
 
         .score-btn-icon {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .score-btn-label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
 
         .score-btn-points {
             display: block;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
+        }
+
+        @media (max-width: 640px) {
+            .score-btn-icon {
+                font-size: 1.1rem;
+            }
+            
+            .score-btn-label {
+                font-size: 0.6rem;
+            }
+            
+            .score-btn-points {
+                font-size: 0.8rem;
+            }
         }
 
         .btn-spin {
@@ -330,22 +464,31 @@
         }
 
         .subtract-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            display: flex;
+            justify-content: center;
             gap: 6px;
         }
 
         .subtract-btn {
-            padding: 8px 6px;
+            padding: 6px 12px;
             background: #374151;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: bold;
             color: white;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: all 0.2s;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            min-width: 60px;
+        }
+
+        @media (max-width: 640px) {
+            .subtract-btn {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+                min-width: 50px;
+            }
         }
 
         .subtract-btn:hover:not(:disabled) {
@@ -371,17 +514,25 @@
         }
 
         .control-btn {
-            padding: 12px 20px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+        }
+
+        @media (max-width: 640px) {
+            .control-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                gap: 4px;
+            }
         }
 
         .control-btn:hover {
@@ -463,19 +614,43 @@
         }
 
         .icon {
-            font-size: 1.2rem;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .icon {
+                font-size: 0.9rem;
+            }
+            
+            .container {
+                gap: 6px;
+            }
+            
+            .button-row {
+                gap: 6px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <button class="orientation-btn" onclick="toggleOrientation()">
-                <span class="orientation-icon" id="orientationIcon">↕️</span>
-                <span id="orientationText">Vertical</span>
-            </button>
-            <h1 class="title">⚡ BEYBLADE X ⚡</h1>
-            <div style="width: 100px;"></div>
+            <div class="header-left">
+                <button class="orientation-btn" onclick="toggleOrientation()">
+                    <span class="orientation-icon" id="orientationIcon">↕️</span>
+                    <span id="orientationText">Vertical</span>
+                </button>
+            </div>
+            <div class="header-center">
+                <h1 class="title">⚡ BEYBLADE X ⚡</h1>
+            </div>
+            <div class="header-right">
+                <div class="mode-group">
+                    <button class="mode-btn active" id="mode4" onclick="setWinMode(4)">4 PT</button>
+                    <button class="mode-btn" id="mode5" onclick="setWinMode(5)">5 PT</button>
+                    <button class="mode-btn" id="mode7" onclick="setWinMode(7)">7 PT</button>
+                </div>
+            </div>
         </div>
         
         <div class="win-counter">
@@ -535,8 +710,6 @@
                     </div>
                     <div class="subtract-buttons">
                         <button class="subtract-btn" onclick="subtractScore(1, 1)">➖ 1</button>
-                        <button class="subtract-btn" onclick="subtractScore(1, 2)">➖ 2</button>
-                        <button class="subtract-btn" onclick="subtractScore(1, 3)">➖ 3</button>
                     </div>
                 </div>
             </div>
@@ -566,101 +739,4 @@
                             <span class="score-btn-icon">🕳️</span>
                             <span class="score-btn-label">Over Finish</span>
                             <span class="score-btn-points">2 PT</span>
-                        </button>
-                        <button class="score-btn btn-extreme" onclick="addScore(2, 3)">
-                            <span class="score-btn-icon">⚡</span>
-                            <span class="score-btn-label">Extreme Finish</span>
-                            <span class="score-btn-points">3 PT</span>
-                        </button>
-                    </div>
-                    <div class="subtract-buttons">
-                        <button class="subtract-btn" onclick="subtractScore(2, 1)">➖ 1</button>
-                        <button class="subtract-btn" onclick="subtractScore(2, 2)">➖ 2</button>
-                        <button class="subtract-btn" onclick="subtractScore(2, 3)">➖ 3</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bottom-controls">
-            <div class="button-row">
-                <button class="control-btn btn-reset" onclick="resetRound()">
-                    <span class="icon">🔄</span>
-                    New Round
-                </button>
-                <button class="control-btn btn-reset-all" onclick="resetAll()">
-                    <span class="icon">🔁</span>
-                    Reset All
-                </button>
-                <button class="control-btn btn-rules" onclick="toggleRules()">
-                    <span class="icon" id="rulesIcon">📋</span>
-                    กฎ
-                </button>
-            </div>
-
-            <div id="rulesPanel" class="rules-panel" style="display: none;">
-                <h3 class="rules-title">📋 Scoring Rules</h3>
-                <div class="rules-grid">
-                    <div class="rule-item">
-                        <span class="rule-badge" style="background: #22c55e;">🌀 1</span>
-                        <span>Spin Finish</span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-badge" style="background: #f97316;">💥 2</span>
-                        <span>Burst Finish</span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-badge" style="background: #a855f7;">🕳️ 2</span>
-                        <span>Over Finish</span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-badge" style="background: #dc2626;">⚡ 3</span>
-                        <span>Extreme Finish</span>
-                    </div>
-                </div>
-                <p class="rule-win">🏆 First to 4 points wins! 🏆</p>
-            </div>
-
-            <div class="credit">By oongET</div>
-        </div>
-    </div>
-
-    <script>
-        var state = {
-            player1Score: 0,
-            player2Score: 0,
-            player1Name: 'Player B',
-            player2Name: 'Player X',
-            player1Wins: 0,
-            player2Wins: 0,
-            winner: null,
-            orientation: 'horizontal',
-            audioContext: null
-        };
-
-        function initAudio() {
-            if (!state.audioContext) {
-                try {
-                    state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                } catch (e) {
-                    console.log('Audio not supported');
-                }
-            }
-        }
-
-        function playClickSound() {
-            try {
-                initAudio();
-                if (!state.audioContext) return;
-                
-                var osc = state.audioContext.createOscillator();
-                var gain = state.audioContext.createGain();
-                
-                osc.connect(gain);
-                gain.connect(state.audioContext.destination);
-                
-                osc.frequency.value = 1000;
-                osc.type = 'sine';
-                
-                var now = state.audioContext.currentTime;
-                gain.ga
+        
